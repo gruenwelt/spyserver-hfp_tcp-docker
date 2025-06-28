@@ -1,0 +1,13 @@
+services:
+  spyserver-hfp_tcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spyserver-hfp_tcp-container
+    restart: unless-stopped
+    ports:
+      - "1234:1234"     # hfp_tcp default port
+      - "5555:5555"     # spyserver default port
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+    entrypoint: ["/usr/bin/tini", "--", "/entrypoint.sh"]
