@@ -1,40 +1,51 @@
 # Combined spyserver and hfp_tcp server docker container
-A Dockerfile that builds and installs the required libairspyhf driver for sypserver and hfp_tcp server and runs both in a container.
 
-Tested to run on Orange Pi Zero 2W and Airspy Discovery HF+ and remote connected from a Mac with SDR++ 2 software and from an iPhone with the SDR Receiver app. Should be able to run on other arm64 single-board computers like Raspberry Pi or other linux computers.
+A Dockerized build and runtime environment for libairspyhf driver for sypserver, spyserver itself and hfp_tcp server and runs both servers in a container.
 
----
-
-## 📦 Prerequisites
-- Repo cloned locally
-  ```bash
-  git clone https://github.com/gruenwelt/spyserver-hfp_tcp-docker
-  ```
-- The spyserver file spyserver*.tar downloaded from [Airspy.com](https://airspy.com/download) and saved in the root of the repo
+This setup runs efficiently even on compact ARM64 single-board computers such as the Raspberry Pi, ensuring broader accessibility and ease of use for common DIY and SDR projects. Thanks to Docker-based isolation, it is also portable and can be deployed on a broad range of systems, including desktops and standard Linux servers.
 
 ---
 
-## 🏗️ Build the Docker image
-```bash
-docker build -t spyserver-hfp_tcp-server .
-```
+## 📌 Version
+
+**v1.0.0** — Initial release with Docker  
+**Tested on**: Orange Pi Zero 2W (4GB RAM) and Banana Pi W4 Zero (2GB RAM) + Airspy Discovery HF+; and connected from client softwares SDR Receiver and SDR++ 2
 
 ---
 
-## 🚀 Run the Container
-```bash
-docker run -d \
-  --name spyserver-hfp_tcp_server-container \
-  --device /dev/bus/usb \
-  --restart unless-stopped \
-  -p 5555:5555 \
-  -p 1234:1234 \
-  spyserver-hfp_tcp-server
-```
+## 📦 Requirements
+
+- Linux-based host system
+- Docker installed on the host
+- Airspy hardware (e.g., Airspy HF+ Discovery)
+- Client software (e.g., SDR++ 2, SDR Receiver)
+- spyserver*.tar for Linux  
+  👉 Downloaded from [Airspy.com](https://airspy.com/download)
+
+---
+
+## 🏗️ Build Instructions
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/gruenwelt/spyserver-hfp_tcp-docker
+   cd spyserver-hfp_tcp-docker
+   ```
+
+2. Download the `spyserver*.tar` file and place it in the root of this repo.
+
+3. Build and run the container:
+
+   ```bash
+   docker compose up -d
+   ```
 
 ---
 
 👉 Notes
 
-- You must manually download and provide the spyserver*.tar file.
-- The first port listed in the docker run is for Spyserver (5555) and second is for hfp_tcp server (1234).
+- While both servers (Spyserver or hfp_tcp) are running parallely and waiting for connection, connection is possible to only one server at a time as the hardware is locked by either server upon connection.
+- Port `5555` is for Spyserver and port `1234` is for hfp_tcp server. Both must be open and mapped for clients to connect.
+
+---
